@@ -6,20 +6,6 @@ CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
 LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ -lpthread -lm
 
-ccred=$(shell echo -e "\033[0;31m")
-ccyellow=$(shell echo -e "\033[0;33m")
-ccend=$(shell echo -e "\033[0m")
-
-IS_EWS=$(shell hostname | grep "ews.illinois.edu")
-IS_CORRECT_CLANG=$(shell clang -v 2>&1 | grep "version 6") 
-ifneq ($(strip $(IS_EWS)),)
-ifeq ($(strip $(IS_CORRECT_CLANG)),)
-$(error $(ccred) On EWS, please run 'module load llvm' first when running CS225 assignments. $(ccend))
-endif
-else
-$(warning $(ccyellow) Looks like you are not on EWS. Be sure to test on EWS before the deadline. $(ccend))
-endif
-
 all : $(EXENAME)
 
 $(EXENAME) : $(OBJS)
