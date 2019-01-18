@@ -64,13 +64,11 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y =0; y < image.height(); y++){
       HSLAPixel & pixel = image.getPixel(x,y);
-      centerX=image.width()/2;
-      centerY=image.height()/2;
       double distance=sqrt((x-centerX)*(x-centerX)+(y-centerY)*(y-centerY));
       if(distance<160){
-        pixel.l=min(pixel.l-0.025*distance,0);
+        pixel.l=pixel.l*(1-(0.005*distance));
       } else {
-        pixel.l=min(pixel.l-0.8,0)
+        pixel.l=pixel.l*0.2;
       }
     }
   }
@@ -93,10 +91,10 @@ PNG illinify(PNG image) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y =0; y <image.height(); y++){
       HSLAPixel & pixel = image.getPixel(x,y);
-      if (abs(pixel.h-11)>abs(pixel.h-216){
-        pixel.h=216;
-      } else{
-        pixel.h=11
+      if (pixel.h <= 293.5 && pixel.h >= 113.5) {
+        pixel.h = 216;
+      } else {
+        pixel.h = 11;
       }
     }
   }
@@ -122,7 +120,7 @@ PNG watermark(PNG firstImage, PNG secondImage) {
       HSLAPixel & firstpixel=firstImage.getPixel(x,y);
       HSLAPixel & secondpixel=secondImage.getPixel(x,y);
       if(secondpixel.l==1){
-        firstpixel.l=min(firstpixel.l+0.2,1);
+        firstpixel.l=fmin(firstpixel.l+0.2,1);
       }
     }
   }
