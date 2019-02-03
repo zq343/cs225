@@ -44,12 +44,12 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
-    rooms = new Room[roomCount];
+    rooms = new Room[fileio::getNumRooms()];
 
     totalCapacity = 0;
     int i = 0;
     while (fileio::areMoreRooms()) {
-        i++; 
+        i++;
         rooms[i] = fileio::nextRoom();
         totalCapacity += rooms[i].capacity;
     }
