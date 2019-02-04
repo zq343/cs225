@@ -119,3 +119,12 @@ Room* Allocator::largestOpening()
     }
     return &rooms[index];
 }
+
+Allocator::~Allocator(){
+  if(alpha!=NULL){
+    delete alpha;
+  }
+  if(rooms!=NULL){
+    delete []rooms;
+  }
+}

@@ -45,6 +45,7 @@ class Allocator
      * @param stream Where to print the results to
      */
     void printRooms(std::ostream & stream = std::cout);
+    ~Allocator();
 
   private:
     /**
@@ -96,4 +97,5 @@ class Allocator
 
     /** Total number of available seats across all rooms */
     int totalCapacity;
+
 };
