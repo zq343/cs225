@@ -7,9 +7,9 @@
 #include "room.h"
 
 Room::Room()
-    : capacity(0), count(0), max_letters(26), letterCount(0)
+    : capacity(0), count(0), max_letters(26), letterCount(0).letters(NULL)
 {
-  letters = new Letter[max_letters];
+
 }
 
 Room::Room(const std::string& init_name, int init_capacity)
