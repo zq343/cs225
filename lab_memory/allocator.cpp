@@ -14,6 +14,8 @@
 
 Allocator::Allocator(const std::string& studentFile, const std::string& roomFile)
 {
+    studentCount = 0;
+    roomCount = 0;
     createLetterGroups();
     loadStudents(studentFile);
     loadRooms(roomFile);
@@ -122,7 +124,7 @@ Room* Allocator::largestOpening()
 
 Allocator::~Allocator(){
   if(alpha!=NULL){
-    delete alpha;
+    delete[] alpha;
   }
   if(rooms!=NULL){
     delete []rooms;

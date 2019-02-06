@@ -24,16 +24,16 @@ Room::Room(const std::string& init_name, int init_capacity)
 
 Room::Room(const Room& other)
 {
-  clear();
+//  clear();
     copy(other);
 }
 
 Room& Room::operator=(const Room& other)
 {
-//   if (this != &other) {
+  if (this != &other) {
         clear();
         copy(other);
-//   }
+   }
     return *this;
 }
 
@@ -63,7 +63,7 @@ void Room::print(std::ostream & stream /* = std::cout */)
 
 void Room::clear()
 {
-  //  if (letters != NULL)
+    if (letters != NULL)
 
         delete[]  letters;
 }
