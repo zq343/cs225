@@ -148,17 +148,14 @@ void Image::scale (double factor){
 //Scales the image to fit within the size (w x h).
 void Image::scale (unsigned w, unsigned h){
   PNG *original= new cs225::PNG(*this);
-  PNG *altered= new cs225::PNG(w,h);
-  //this->cs225::PNG::resize(w,h);
-//  double factW=w/original->width();
-  //double factH=h/original->height();
-  double factW=w/original->width_;
-  double factH=h/original>height_;
+  this->cs225::PNG::resize((int)w,(int)h);
+  double factW=(int)(w)/original->width();
+  double factH=(int)(h)/original->height();
   for (unsigned x = 0; x < w; x++) {
     for (unsigned y =0; y <h; y++){
-      HSLAPixel & pixel = original->getPixel(round(x/factW),round(y/factH));
-      HSLAPixel & alteredpixel = altered->getPixel(x,y);
-      alteredpixel=pixel;
+      HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factH));
+      HSLAPixel & alteredPixel = this->getPixel(x,y);
+      alteredPixel=pixel;
     }
   }
 }
