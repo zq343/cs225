@@ -94,7 +94,6 @@ void Image::greyscale (){
   for (unsigned x = 0; x < this->width(); x++) {
     for (unsigned y =0; y < this->height(); y++){
       HSLAPixel & pixel = this->getPixel(x,y);
-      pixel.h=0;
       pixel.s=0;
     }
   }
@@ -153,9 +152,15 @@ void Image::scale (unsigned w, unsigned h){
   double factH=(int)(h)/original->height();
   for (unsigned x = 0; x < w; x++) {
     for (unsigned y =0; y <h; y++){
-      HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factH));
-      HSLAPixel & alteredPixel = this->getPixel(x,y);
-      alteredPixel=pixel;
+      if(factH>factW){
+        HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factW));
+        HSLAPixel & alteredPixel = this->getPixel(x,y);
+        alteredPixel=pixel;
+      } else {
+        HSLAPixel & pixel = original->getPixel((int)(x/factH),(int)(y/factH));
+        HSLAPixel & alteredPixel = this->getPixel(x,y);
+        alteredPixel=pixel;
+      }
     }
   }
 }
