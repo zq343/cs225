@@ -146,21 +146,23 @@ void Image::scale (double factor){
 
 //Scales the image to fit within the size (w x h).
 void Image::scale (unsigned w, unsigned h){
-  PNG *original= new cs225::PNG(*this);
-  this->cs225::PNG::resize((int)w,(int)h);
-  double factW=(int)(w)/original->width();
-  double factH=(int)(h)/original->height();
-  for (unsigned x = 0; x < w; x++) {
-    for (unsigned y =0; y <h; y++){
+//  PNG *original= new cs225::PNG(*this);
+//  this->cs225::PNG::resize((int)w,(int)h);
+  double factW=(int)(w)/this->width();
+  double factH=(int)(h)/this->height();
+//  for (unsigned x = 0; x < w; x++) {
+//    for (unsigned y =0; y <h; y++){
       if(factH>factW){
-        HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factW));
-        HSLAPixel & alteredPixel = this->getPixel(x,y);
-        alteredPixel=pixel;
+        scale(factW);
+  //     HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factW));
+  //      HSLAPixel & alteredPixel = this->getPixel(x,y);
+  //      alteredPixel=pixel;
       } else {
-        HSLAPixel & pixel = original->getPixel((int)(x/factH),(int)(y/factH));
-        HSLAPixel & alteredPixel = this->getPixel(x,y);
-        alteredPixel=pixel;
-      }
-    }
+        scale(factH);
+  //      HSLAPixel & pixel = original->getPixel((int)(x/factH),(int)(y/factH));
+  //      HSLAPixel & alteredPixel = this->getPixel(x,y);
+  //      alteredPixel=pixel;
+
+    
   }
 }
