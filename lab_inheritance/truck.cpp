@@ -138,4 +138,3 @@ void Truck::clear()
     delete window;
     delete engine;
 }
-

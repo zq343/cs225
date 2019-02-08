@@ -31,10 +31,11 @@ void Allocator::loadStudents(const std::string& file)
     // Read in students
     fileio::loadStudents(file);
     studentCount = fileio::getNumStudents();
+//    std::cout << "__LINE__" << __LINE__<<std::endl;
 
     for (int i = 0; i < studentCount; i++) {
         std::string name = fileio::nextStudent();
-        char letter = name[0];
+        char letter = std::toupper(name[0]);
         int index = (int)letter - 'A';
         alpha[index].addStudent();
     }
@@ -44,14 +45,18 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
-    rooms = new Room[roomCount];
+    //rooms = new Room[roomCount];
+    rooms=new Room[fileio::getNumRooms()];
 
     totalCapacity = 0;
     int i = 0;
+  //  std::cout << "__LINE__" << __LINE__<<cnt<<std::endl;
     while (fileio::areMoreRooms()) {
-        i++; 
+
         rooms[i] = fileio::nextRoom();
         totalCapacity += rooms[i].capacity;
+//        std::cout << "__LINE__" << __LINE__<<std::endl;
+        i++;
     }
 }
 
@@ -100,9 +105,11 @@ int Allocator::solve()
 int Allocator::minSpaceRemaining()
 {
     int border = 1000000;
-    for (int i = 0; i < roomCount; i++)
-        if (rooms[i].spaceRemaining() < border)
+    for (int i = 0; i < roomCount; i++){
+        if (rooms[i].spaceRemaining() < border){
             border = rooms[i].spaceRemaining();
+          }
+        }
     return border;
 }
 

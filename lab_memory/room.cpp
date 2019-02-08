@@ -30,8 +30,11 @@ Room& Room::operator=(const Room& other)
 {
     if (this != &other) {
         clear();
+//        Room &copied=new Room(other.name,other.capacity);
         copy(other);
+//        *this = *copied;
     }
+
     return *this;
 }
 
@@ -61,17 +64,21 @@ void Room::print(std::ostream & stream /* = std::cout */)
 
 void Room::clear()
 {
-    if (letters != NULL)
+  //  if (letters != NULL)
 
-        delete letters;
+        delete[] letters;
 }
 
 void Room::copy(const Room& other)
-{
-    name = other.name;
-    capacity = other.capacity;
+{   clear();
+    name=other.name;
+    max_letters=other.max_letters;
     count = other.count;
     letterCount = other.letterCount;
-    letters = other.letters;
+    letters= new Letter [max_letters];
+    for(int i=0; i< max_letters; i++){
+      letters[i] = other.letters[i];
+    }
+    //letters = other.letters;
 
 }
