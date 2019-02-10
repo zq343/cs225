@@ -1,9 +1,0 @@
-*DS_Store
-*.o
-*.d
-.objs/
-
-test
-allocate
-allocate-asan
-
