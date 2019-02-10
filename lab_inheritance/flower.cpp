@@ -38,7 +38,7 @@ Flower::Flower(const Vector2& center)
 
     //Circle my_pistil(Vector2(center.x(), center.y() - PISTIL_RADIUS / 2),
                     // PISTIL_COLOR, PISTIL_RADIUS);
-    pistil = new Circle(Vector2(center.x(), center.y() - PISTIL_RADIUS / 2),
+    pistil = new Circlemake (Vector2(center.x(), center.y() - PISTIL_RADIUS / 2),
                      PISTIL_COLOR, PISTIL_RADIUS);
 
     const Vector2 leaf_center(stem_center.x() - STEM_WIDTH / 2 + 1,
