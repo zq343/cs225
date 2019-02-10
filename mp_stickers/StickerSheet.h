@@ -6,6 +6,7 @@
 
 #include "Image.h"
 
+
 class StickerSheet{
 public:
   //Initializes this StickerSheet with a base picture
@@ -28,14 +29,15 @@ public:
   //Removes the sticker at the given zero-based layer index.
   void 	removeSticker (unsigned index);
   //Returns a pointer to the sticker at the specified index, not a copy of it.
-  Image * 	getSticker (unsigned index);
+  Image * getSticker (unsigned index);
   //Renders the whole StickerSheet on one Image and returns that Image.
   Image 	render () const;
 private:
   Image *picture_;
-  unsigned max_;
-  unsigned x_;
-  unsigned y_;
+  Image *stickers_;
+  int max_;
+  int* x_;
+  int* y_;
   int count;
   void _copy(const StickerSheet &other);
   void _destroy();
