@@ -99,8 +99,9 @@ Image StickerSheet::render () const{
   for(int i=count-1; i>-1; i--){
     for(unsigned w=0; w<stickers_[i].width(); w++){
       for(unsigned h=0; h<stickers_[i].height(); h++){
-        HSLAPixel& stickerpixel=stickers_[i].getPixel(w,stickers_[i].height()-1-h);
-        HSLAPixel& pixel=output->getPixel(x_[i]+w,y_[i]-+h);
+    //    HSLAPixel& stickerpixel=stickers_[i].getPixel(w,stickers_[i].height()-1-h);
+        HSLAPixel& stickerpixel=stickers_[i].getPixel(w,h);
+        HSLAPixel& pixel=output->getPixel(x_[i]+w,y_[i]+h);
         if(stickerpixel.a !=0){
           pixel=stickerpixel;
         }
