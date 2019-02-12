@@ -9,7 +9,7 @@ StickerSheet::StickerSheet (const Image &picture, unsigned max){
   x_=new int[max];
   y_=new int[max];
   for (int i = 0; i < max_; i++){
-		stickers_[i] = new Image();
+		stickers_[i] = NULL;
   //  stickers_[i]=NULL;
     x_[i]=0;
     y_[i]=0;
@@ -40,7 +40,9 @@ void 	StickerSheet::changeMaxStickers (unsigned max){
   int* y = new int[max];
   if ((int)max < (int)max_) {
     for (int i = 0; i < (int)max; i++) {
-      stickers[i]= stickers_[i];
+      if(stickers[i]!=NULL){
+        stickers[i]= stickers_[i];
+      }
       x[i] = x_[i];
       y[i] = y_[i];
     }
@@ -48,7 +50,9 @@ void 	StickerSheet::changeMaxStickers (unsigned max){
 
   if((int)max > (int)max_){
     for (int i = 0; i < (int)max_; i++) {
-      stickers[i]= stickers_[i];
+      if(stickers[i]!=NULL){
+        stickers[i]= stickers_[i];
+      }
       x[i] = x_[i];
       y[i] = y_[i];
     }
@@ -101,7 +105,7 @@ int StickerSheet::addSticker (Image &sticker, unsigned x, unsigned y){
     if(stickers_[i]==NULL){
       y_[i]=(int)y;
       x_[i]=(int)x;
-      stickers_[i]=&sticker;
+      stickers_[i]=new Image(sticker);
       break;
     }
   }
@@ -109,7 +113,7 @@ int StickerSheet::addSticker (Image &sticker, unsigned x, unsigned y){
 }
 
 bool 	StickerSheet::translate (unsigned index, unsigned x, unsigned y){
-  if((int)index<=max_){
+  if((int)index<=max_&&stickers_[(int)index]!=NULL){
     x_[index]=x;
     y_[index]=y;
     return true;
@@ -122,7 +126,7 @@ void 	StickerSheet::removeSticker (unsigned index){
     return ;
   }
   delete stickers_[(int)index];
-  stickers_[(int)index]=new Image();
+  stickers_[(int)index]=NULL;
   x_[index]=0;
   y_[index]=0;
 /*  StickerSheet *removed=new StickerSheet((*picture_),max_);
@@ -177,7 +181,7 @@ Image StickerSheet::render () const{
       continue;
     }
     max_x = (x_[i]+stickers_[i]->width() > max_x)?(x_[i]+stickers_[i]->width()):max_x;
-        max_y = (y_[i]+stickers_[i]->height() > max_y)?(y_[i]+stickers_[i]->height()):max_y;
+    max_y = (y_[i]+stickers_[i]->height() > max_y)?(y_[i]+stickers_[i]->height()):max_y;
   }
 
   Image *output=new Image();
@@ -255,11 +259,14 @@ void StickerSheet::_copy(const StickerSheet &other){
   stickers_=new Image *[max_];
   picture_=new Image(*other.picture_);
   for(int i=0; i<max_; i++){
-    if(stickers_[i]!=NULL){
-      stickers_[i]=new Image(*(other.stickers_[i]));
-    }
     x_[i]=other.x_[i];
     y_[i]=other.y_[i];
+    if(other.stickers_[i]!=NULL){
+      stickers_[i]=new Image(*(other.stickers_[i]));
+    } else{
+      stickers_[i]=NULL;
+    }
+
   }
 }
 
@@ -272,7 +279,7 @@ void StickerSheet::_destroy(){
       stickers_[i]=NULL;
     }
   }
-  delete[] stickers_;stickers_=NULL;
+  delete[] stickers_;
 //  delete[] stickers_;
   delete picture_;
 }
