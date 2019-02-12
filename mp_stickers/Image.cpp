@@ -155,13 +155,6 @@ void Image::scale (double factor){
       }
     }
   }
-  for (unsigned x = 0; x < this->width(); x++) {
-    for (unsigned y =0; y < this->height(); y++){
-      HSLAPixel & pixel = this->getPixel(x,y);
-      HSLAPixel & origpixel = original->getPixel(x/factor,y/factor);
-      pixel=origpixel;
-    }
-  }
   delete original;
 }
 
