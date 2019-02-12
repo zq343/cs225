@@ -162,8 +162,8 @@ void Image::scale (double factor){
 
 //Scales the image to fit within the size (w x h).
 void Image::scale (unsigned w, unsigned h){
-  double factW=w/this->width();
-  double factH=h/this->height();
+  double factW=(double)w/(double)this->width();
+  double factH=(double)h/(double)this->height();
   if (factW < factH){
     scale(factW);
   }else {
