@@ -16,7 +16,6 @@ TEST_CASE("A basic StickerSheet works", "[weight=5][part=2]") {
 
   Image expected;
   expected.readFromFile("tests/expected.png");
-
   REQUIRE( sheet.render() == expected );
 }
 

@@ -164,9 +164,13 @@ void Image::scale (double factor){
 void Image::scale (unsigned w, unsigned h){
   double factW=w/this->width();
   double factH=h/this->height();
-  double factor=fmin(factH,factW);
-  scale(factor);
+  if (factW < factH){
+    scale(factW);
+  }else {
+    scale(factH);
+  }
 }
+
 //  PNG *original= new cs225::PNG(*this);
 //  this->cs225::PNG::resize((int)w,(int)h);
 

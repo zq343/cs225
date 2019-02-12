@@ -34,11 +34,11 @@ public:
   Image 	render () const;
 private:
   Image *picture_;
-  Image *stickers_;
+  Image **stickers_;
   int max_;
   int* x_;
   int* y_;
-  int count;
+  //int count;
   void _copy(const StickerSheet &other);
   void _destroy();
 };
