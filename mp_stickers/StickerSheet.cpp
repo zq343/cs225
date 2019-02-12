@@ -14,11 +14,11 @@ StickerSheet::~StickerSheet (){
   _destroy();
 }
 
-StickerSheet::StickerSheet (const StickerSheet::StickerSheet &other){
+StickerSheet::StickerSheet (const StickerSheet &other){
   _copy(other);
 }
 
-const StickerSheet & 	StickerSheet::operator= (const StickerSheet::StickerSheet &other){
+const StickerSheet & 	StickerSheet::operator= (const StickerSheet &other){
   if(this != &other){
     _destroy();
     _copy(other);
@@ -111,7 +111,7 @@ Image StickerSheet::render () const{
   return *output;
 }
 
-void StickerSheet::_copy(const StickerSheet::StickerSheet &other){
+void StickerSheet::_copy(const StickerSheet &other){
 
   max_=other.max_;
   x_=new int[max_];

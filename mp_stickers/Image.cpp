@@ -132,7 +132,29 @@ void Image::illinify (){
 //Scale the Image by a given factor.
 void Image::scale (double factor){
   PNG *original= new cs225::PNG(*this);
-  this->cs225::PNG::resize(this->width()*factor,this->height()*factor);
+  this->cs225::PNG::resize(ceil(this->width()*factor),ceil(this->height()*factor));
+  if (factor>0 && factor <1){
+    for (unsigned x = 0; x < this->width(); x++) {
+      for (unsigned y =0; y < this->height(); y++){
+        HSLAPixel & pixel = this->getPixel(x,y);
+        HSLAPixel & origpixel = original->getPixel(ceil(x/factor),ceil(y/factor));
+        pixel=origpixel;
+      }
+    }
+  }
+  if(factor>1){
+    for (unsigned x = 0; x < this->width()/factor; x++) {
+      for (unsigned y =0; y < this->height()/factor; y++){
+        HSLAPixel & origpixel = original->getPixel(x,y);
+        for (unsigned a = 0; a < ceil(factor); a++) {
+          for (unsigned b =0; b < ceil(factor); b++){
+            HSLAPixel & pixel = this->getPixel(x*factor+a,y*factor+b);
+            pixel=origpixel;
+          }
+        }
+      }
+    }
+  }
   for (unsigned x = 0; x < this->width(); x++) {
     for (unsigned y =0; y < this->height(); y++){
       HSLAPixel & pixel = this->getPixel(x,y);
@@ -147,15 +169,16 @@ void Image::scale (double factor){
 
 //Scales the image to fit within the size (w x h).
 void Image::scale (unsigned w, unsigned h){
-//  PNG *original= new cs225::PNG(*this);
-//  this->cs225::PNG::resize((int)w,(int)h);
   double factW=w/this->width();
   double factH=h/this->height();
   double factor=fmin(factH,factW);
-  std::cout<<factW<<factH<<std::endl;
-//  for (unsigned x = 0; x < w; x++) {
-//    for (unsigned y =0; y <h; y++){
   scale(factor);
+}
+//  PNG *original= new cs225::PNG(*this);
+//  this->cs225::PNG::resize((int)w,(int)h);
+
+//  for (unsigned x = 0; x < w; x++) {
+
   //     HSLAPixel & pixel = original->getPixel((int)(x/factW),(int)(y/factW));
   //      HSLAPixel & alteredPixel = this->getPixel(x,y);
   //      alteredPixel=pixel;
@@ -163,5 +186,3 @@ void Image::scale (unsigned w, unsigned h){
   //      HSLAPixel & pixel = original->getPixel((int)(x/factH),(int)(y/factH));
   //      HSLAPixel & alteredPixel = this->getPixel(x,y);
   //      alteredPixel=pixel;
-
-}
