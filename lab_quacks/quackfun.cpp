@@ -29,9 +29,17 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
-
+  T tmp=s.top();
+  s.pop();
+  if(s.empty()){
+    s.push(tmp);
+    return tmp;
+  }
+  T prev= sum(s);
+  s.push(tmp);
+  return tmp+prev;
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+     // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -55,9 +63,19 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
-
+  stack <char> balanced;
+  while(input.empty()==false){
+    if(input.front()=='['){
+      balanced.push(input.front());
+    }
+    if(input.front()==']'){
+      if(balanced.empty()) return false;
+      balanced.pop();
+    }
+    input.pop();
+  }
     // @TODO: Make less optimistic
-    return true;
+  return balanced.empty();
 }
 
 /**
@@ -78,9 +96,33 @@ bool isBalanced(queue<char> input)
 template <typename T>
 void scramble(queue<T>& q)
 {
-    stack<T> s;
-    // optional: queue<T> q2;
-
+  stack<T> s;
+  queue<T> q2;
+  int block=1;
+  while(q.empty()==false){
+    if(block%2!=0){
+      for(int i=0; i<block; i++){
+        q2.push(q.front());
+        q.pop();
+        if(q.empty()) break;
+      }
+      block++;
+    }
+    if(block%2==0){
+      for(int i=0; i<block; i++){
+        s.push(q.front());
+        q.pop();
+        if(q.empty()) break;
+      }
+      for(int i=0; i<block; i++){
+        q2.push(s.top());
+        s.pop();
+        if(s.empty()) break;
+      }
+      block++;
+    }
+  }
+  q=q2;
     // Your code here
 }
 
@@ -109,13 +151,25 @@ void scramble(queue<T>& q)
 template <typename T>
 bool verifySame(stack<T>& s, queue<T>& q)
 {
-    bool retval = true; // optional
-    // T temp1; // rename me
-    // T temp2; // rename :)
+  bool retval = true;
+  if(s.empty())  return retval; // the base case for the recursion
+   // optional
+  T stmp; // rename me
+  T qtmp; // rename :)
+  stmp=s.top();
+  s.pop();// removing elements and access the bottom of the stack
+  retval=verifySame(s,q);// recursion and access the last element of the stacks
 
+  qtmp=q.front(); //the front of the queue, to be compare with the bottom of the stack
+
+  if(qtmp!=stmp) retval = false; //if the bottom of the stack != the front of the queue,
+  //the result is false.
+  s.push(stmp);
+  q.pop();
+  q.push(qtmp);
     // Your code here
 
-    return retval;
+  return retval;
 }
 
 }
