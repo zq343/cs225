@@ -4,7 +4,7 @@
  */
 
 template <class T>
-List<T>::List() { 
+List<T>::List() {
   // @TODO: graded in MP3.1
     ListNode* head_ = NULL;
     ListNode* tail_ = NULL;
@@ -50,15 +50,18 @@ void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
   ListNode * newNode = new ListNode(ndata);
   newNode -> next = head_;
-  newNode -> prev = NULL;
-  
+  //newNode -> prev = NULL;
+
+
   if (head_ != NULL) {
     head_ -> prev = newNode;
+    head_ = newNode;
   }
   if (tail_ == NULL) {
     tail_ = newNode;
+    head_ = newNode;
   }
-  
+
 
   length_++;
 
@@ -72,6 +75,25 @@ void List<T>::insertFront(T const & ndata) {
  */
 template <typename T>
 void List<T>::insertBack(const T & ndata) {
+  ListNode * newNode = new ListNode(ndata);
+  //newNode -> next = NULL;
+  newNode->  prev =tail_;
+  //newNode -> prev = tail_;
+  tail_=newNode;
+  if (tail_!= NULL) {
+    tail->next=newNode;
+    newNode -> prev = newNode;
+    head_ = newNode;
+  }
+  if(head_ == NULL){
+    head_ = newNode;
+    //tail_ = newNode;
+    //newNode->next=NULL;
+  //  length_++;
+  }
+
+  length_++;
+
   /// @todo Graded in MP3.1
 }
 
