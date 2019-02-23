@@ -117,16 +117,16 @@ template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
   ListNode * curr = start;
-  for (int i = 0; i < splitPoint && curr != NULL; i++) {
+  //for (int i = 0; i < splitPoint && curr != NULL; i++) {
+  for (int i = 0; i < splitPoint; i++) {
     curr = curr->next;
   }
-  ListNode * tmp = curr;
+//  ListNode * tmp = curr;
   if (curr != NULL) {
-      curr->prev->next = NULL;
-      tmp->prev = NULL;
+    curr->prev->next = NULL;
+    curr->prev = NULL;
   }
-
-  return tmp;
+  return curr;
 }
 
 /**
@@ -140,6 +140,18 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  */
 template <typename T>
 void List<T>::waterfall() {
+  ListNode *curr=head_;
+  ListNode *tmp;
+  while(curr->next!=tail_){
+    tmp=curr->next;
+    curr->next=curr->next->next;
+    curr->next->prev=curr;
+    curr=curr->next;
+    tail_->next=tmp;
+    tmp->prev=tail_;
+    tail_=tmp;
+    tmp->next=NULL;
+  }
   /// @todo Graded in MP3.1
 }
 
