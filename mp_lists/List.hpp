@@ -2,6 +2,7 @@
  * @file list.cpp
  * Doubly Linked List (MP 3).
  */
+using namespace std;
 
 template <class T>
 List<T>::List() {
@@ -27,7 +28,7 @@ typename List<T>::ListIterator List<T>::begin() const {
 template <typename T>
 typename List<T>::ListIterator List<T>::end() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(tail_->next);
 }
 
 
@@ -38,14 +39,15 @@ typename List<T>::ListIterator List<T>::end() const {
 template <typename T>
 void List<T>::_destroy() {
   /// @todo Graded in MP3.1
-  while(head_!=NULL){
-    ListNode* tmp=head_;
+  if(head_==NULL) return;
+  ListNode* tmp=head_;
+  while(tmp!=NULL){
     head_=head_->next;
     delete tmp;
+    tmp=head_;
   }
-  head_=NULL;
-  tail_=NULL;
-  length_=0;
+
+  return;
 }
 
 /**
@@ -117,12 +119,13 @@ template <typename T>
 typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   /// @todo Graded in MP3.1
   ListNode * curr = start;
+  if(splitPoint<1) return start;
   //for (int i = 0; i < splitPoint && curr != NULL; i++) {
-  for (int i = 0; i < splitPoint; i++) {
+  for (int i = 0; i < splitPoint && curr != NULL ;i++) {
     curr = curr->next;
   }
 //  ListNode * tmp = curr;
-  if (curr != NULL) {
+  if (curr != NULL && curr->prev != NULL) {
     curr->prev->next = NULL;
     curr->prev = NULL;
   }
@@ -142,7 +145,7 @@ template <typename T>
 void List<T>::waterfall() {
   ListNode *curr=head_;
   ListNode *tmp;
-  while(curr->next!=tail_){
+  while(curr->next->next!=tail_){
     tmp=curr->next;
     curr->next=curr->next->next;
     curr->next->prev=curr;
@@ -174,8 +177,31 @@ void List<T>::reverse() {
  * @param endPoint A pointer reference to the last node in the sequence to
  *  be reversed.
  */
+
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
+
+  if(startPoint==endPoint|| startPoint==NULL || endPoint==NULL) return;
+  ListNode *prevNode= startPoint->prev;
+  ListNode *nextNode= startPoint ->next;
+  startPoint->next=prevNode;
+  startPoint->prev=nextNode;
+  reverse(nextNode,endPoint);
+  ListNode *tmp=startPoint;
+  startPoint=endPoint;
+  endPoint=tmp;
+/*
+ ListNode prev=startPoint;
+  ListNode curr=startPoint->next;
+  ListNode tmp=curr->next;
+  while(curr!=NULL){
+    curr->next=prev;
+    prev->prev=curr;
+    curr->prev=tmp;
+
+    prev=curr;
+    curr=tmp;*/
+
   /// @todo Graded in MP3.2
 }
 
