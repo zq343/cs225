@@ -61,14 +61,12 @@ void List<T>::insertFront(T const & ndata) {
 
   if (head_ != NULL) {
     newNode -> next = head_;
-    head_->prev=newNode;
+    head_-> prev = newNode;
     head_=newNode;
   }
   if (tail_ == NULL) {
     tail_ = newNode;
     head_= newNode;
-    newNode->next=NULL;
-    newNode->prev=NULL;
   }
 
 
@@ -88,6 +86,7 @@ void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
   if(tail_!=NULL){
     newNode->prev=tail_;
+    tail_->next=newNode;
     tail_=newNode;
   }
   if (tail_==NULL){
@@ -123,12 +122,14 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
     curr = curr->next;
   }
 
+
+
   if (curr != NULL) {
       curr->prev->next = NULL;
       curr->prev = NULL;
   }
 
-  return NULL;
+  return curr;
 }
 
 /**
