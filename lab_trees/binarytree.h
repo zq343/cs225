@@ -172,6 +172,8 @@ class BinaryTree
         Node* root;
 
     private:
+      T leftMax(const Node* root)const;
+      T rightMin(const Node* root)const;
       void mirror(Node* root);
       bool isOrdered(const Node* subRoot) const;
       void _getPaths(std::vector<std::vector<T>>& paths,std::vector<T> path, Node *subRoot) const;

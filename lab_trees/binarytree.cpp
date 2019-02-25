@@ -124,16 +124,44 @@ bool BinaryTree<T>::isOrderedRecursive() const
 template <typename T>
 bool BinaryTree<T>::isOrdered(const Node* subRoot) const
 {
-  bool eval = true;
-  if(subRoot->left == NULL && subRoot->right == NULL) return true;
+
+  if(subRoot->left == NULL && subRoot->right == NULL) {
+    return true;
+  }
+  bool eval;
   if(subRoot->left != NULL){
-    eval= eval && isOrdered(subRoot->left)&& (subRoot->elem >= (subRoot->left->elem));
+    eval= eval && isOrdered(subRoot->left)&& (subRoot->elem >= subRoot->left->elem);
   }
   if(subRoot->right != NULL){
-    eval=eval && isOrdered(subRoot->right)&& (subRoot->elem <= (subRoot->right->elem));
+    eval=eval && isOrdered(subRoot->right)&& (subRoot->elem <= subRoot->right->elem);
   }
   return eval;
 }
+/*
+template <typename T>
+T BinaryTree<T>::leftMax(const Node* root) const{
+    T res;
+    if (root == NULL)
+        return res;
+
+    if (root->left != NULL)
+        res = root->left->elem;
+    return max({ leftMax(root->left),
+                 res,
+                 leftMax(root->right) });
+}
+template <typename T>
+T BinaryTree<T>::rightMin(const Node* root)const {
+    T res;
+    if (root == NULL)
+        return res;
+
+    if (root->right != NULL)
+        res = root->right->elem;
+    return min({ rightMin(root->left),
+                 res,
+                 rightMin(root->right) });
+}*/
 
 
 /**
