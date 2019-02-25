@@ -1,8 +1,8 @@
 /**
  * @file abstractsyntaxtree.h
- * Declaraction of the AbstractSyntaxTree class, which inherits 
- * BinaryTree<std::string>. This tree is a type of binary tree used 
- * to compute syntactical expressions. In this case, we will be 
+ * Declaraction of the AbstractSyntaxTree class, which inherits
+ * BinaryTree<std::string>. This tree is a type of binary tree used
+ * to compute syntactical expressions. In this case, we will be
  * evaluating PEMDAS, except we will not have to handle exponential calculations.
  */
 
@@ -12,15 +12,15 @@
 
 #include <string>
 
-class AbstractSyntaxTree 
+class AbstractSyntaxTree
 : public BinaryTree<std::string>
 {
     public:
         /**
-         * Constructor that takes in a root node representing the 
+         * Constructor that takes in a root node representing the
          * pre-constructed AST.
-         * @param node The root node of the preconstructed tree 
-         * we want to wrap as an Abstract Syntax Tree 
+         * @param node The root node of the preconstructed tree
+         * we want to wrap as an Abstract Syntax Tree
          */
         AbstractSyntaxTree(AbstractSyntaxTree::Node* node);
 
@@ -28,6 +28,7 @@ class AbstractSyntaxTree
          * Calculates the value from an AST (Abstract Syntax Tree).
          */
         double eval() const;
+        double math(Node* subRoot)const;
     private:
         // You may add any helper functions you like.....
 };
