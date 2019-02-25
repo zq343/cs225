@@ -5,6 +5,7 @@
  */
 #include "TreeTraversals/InorderTraversal.h"
 #include <iostream>
+#include <cmath>
 
 /**
  * @return The height of the binary tree. Recall that the height of a binary
@@ -123,15 +124,15 @@ bool BinaryTree<T>::isOrderedRecursive() const
 template <typename T>
 bool BinaryTree<T>::isOrdered(const Node* subRoot) const
 {
-  bool isOrdered = true;
-  if(subRoot->left==NULL && subRoot->right==NULL)  isOrdered=true;
+  bool eval = true;
+  if(subRoot->left == NULL && subRoot->right == NULL) return true;
   if(subRoot->left != NULL){
-    if(subRoot->elem <= subRoot->left->elem) isOrdered = false;
+    eval= eval && isOrdered(subRoot->left)&& (subRoot->elem >= (subRoot->left->elem));
   }
   if(subRoot->right != NULL){
-    if(subRoot->elem >= subRoot->right->elem) isOrdered = false;
+    eval=eval && isOrdered(subRoot->right)&& (subRoot->elem <= (subRoot->right->elem));
   }
-  return isOrdered;
+  return eval;
 }
 
 
