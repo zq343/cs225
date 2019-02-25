@@ -94,7 +94,7 @@ class BinaryTree
         /**
          * @return The root of the binary tree
          */
-        Node* getRoot() const;  
+        Node* getRoot() const;
 
         /**
          * This lab deals with the following six helper functions:
@@ -172,7 +172,10 @@ class BinaryTree
         Node* root;
 
     private:
-
+      void mirror(Node* root);
+      bool isOrdered(const Node* subRoot) const;
+      void _getPaths(std::vector<std::vector<T>>& paths,std::vector<T> path, Node *subRoot) const;
+      int depth(const Node* Root, const Node* subRoot ) const;
         /**
          * Put your own private helper functions here.
          * Look at the private helpers for height and printLeftToRight
@@ -228,6 +231,8 @@ class BinaryTree
          * @param treeVector stores nodes in order
          */
         void inOrder(Node *subRoot, std::vector<T>& treeVector);
+
+        int & _sumDistances(int distance, const Node* subRoot, int &sum) const;
 };
 
 #include "binarytree_given.cpp"
