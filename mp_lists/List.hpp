@@ -7,8 +7,8 @@ using namespace std;
 template <class T>
 List<T>::List() {
   // @TODO: graded in MP3.1
-    ListNode* head_ = NULL;
-    ListNode* tail_ = NULL;
+    head_ = NULL;
+    tail_ = NULL;
     length_ = 0;
 }
 
@@ -41,12 +41,11 @@ void List<T>::_destroy() {
   /// @todo Graded in MP3.1
   if(head_==NULL) return;
   ListNode* tmp=head_;
-  while(tmp!=NULL){
-    head_=head_->next;
+  while(head_!=NULL){
+    head_ = tmp->next;
     delete tmp;
-    tmp=head_;
+    tmp = head_;
   }
-
   return;
 }
 
@@ -148,9 +147,10 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
  */
 template <typename T>
 void List<T>::waterfall() {
+  if(head_==NULL) return;
   ListNode *curr=head_;
   ListNode *tmp;
-  while(curr->next->next!=tail_){
+  while(curr->next->next!=NULL){
     tmp=curr->next;
     curr->next=curr->next->next;
     curr->next->prev=curr;
@@ -185,17 +185,17 @@ void List<T>::reverse() {
 
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
+  /*ListNode* prevNode, *nextNode;
+  ListNode *curr=startPoint
+  if(startPoint==NULL || endPoint==NULL) return;
 
-  if(startPoint==endPoint|| startPoint==NULL || endPoint==NULL) return;
-  ListNode *prevNode= startPoint->prev;
-  ListNode *nextNode= startPoint ->next;
+  prevNode = curr->prev;
+  nextNode = curr ->next;
   startPoint->next=prevNode;
   startPoint->prev=nextNode;
-  reverse(nextNode,endPoint);
-  ListNode *tmp=startPoint;
-  startPoint=endPoint;
-  endPoint=tmp;
-/*
+  return reverse(nextNode,endPoint);
+
+
  ListNode prev=startPoint;
   ListNode curr=startPoint->next;
   ListNode tmp=curr->next;
@@ -206,6 +206,29 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 
     prev=curr;
     curr=tmp;*/
+    if(startPoint==NULL||endPoint==NULL) return;
+    //two temp pointer for linking list
+
+    ListNode* prev = startPoint->prev;
+    ListNode* next = endPoint->next;
+    ListNode* temp;
+    ListNode* curr;
+    curr = startPoint;
+    while(curr!=next){
+      //rotate myself
+      temp = curr->next;
+      curr->next = curr->prev;
+      curr->prev = temp;
+      curr = curr->prev;
+    }
+    startPoint->next = next;
+    endPoint->prev = prev;
+    if(prev!=NULL) prev->next = endPoint;
+    if(next!=NULL) next->prev = startPoint;
+
+    temp = startPoint;
+    startPoint = endPoint;
+    endPoint = temp;
 
   /// @todo Graded in MP3.2
 }
@@ -218,6 +241,20 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
  */
 template <typename T>
 void List<T>::reverseNth(int n) {
+  if (head_==NULL) return;
+  ListNode * startPoint = head_;
+	ListNode * endPoint = head_;
+	while(endPoint->next != NULL)
+	{
+		endPoint = startPoint;
+		for(int i = 0; i < n; i++)
+		{
+			if(endPoint->next != NULL)
+			endPoint = endPoint->next;
+		}
+		reverse(startPoint, endPoint);
+		startPoint = endPoint->next;
+	}
   /// @todo Graded in MP3.2
 }
 
