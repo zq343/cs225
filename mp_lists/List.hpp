@@ -211,14 +211,14 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 
     ListNode* prev = startPoint->prev;
     ListNode* next = endPoint->next;
-    ListNode* temp;
+    ListNode* tmp;
     ListNode* curr;
     curr = startPoint;
     while(curr!=next){
       //rotate myself
-      temp = curr->next;
+      tmp = curr->next;
       curr->next = curr->prev;
-      curr->prev = temp;
+      curr->prev = tmp;
       curr = curr->prev;
     }
     startPoint->next = next;
@@ -226,9 +226,9 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     if(prev!=NULL) prev->next = endPoint;
     if(next!=NULL) next->prev = startPoint;
 
-    temp = startPoint;
+    tmp = startPoint;
     startPoint = endPoint;
-    endPoint = temp;
+    endPoint = tmp;
 
   /// @todo Graded in MP3.2
 }
