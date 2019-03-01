@@ -74,7 +74,36 @@ HuffmanTree::TreeNode*
 HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
                             queue<TreeNode*>& mergeQueue)
 {
-
+  TreeNode * tmp;
+  if (singleQueue.empty()==false && mergeQueue.empty()==false){
+    if(singleQueue.front()< mergeQueue.front()){
+      tmp=singleQueue.front();
+      singleQueue.pop();
+      return tmp;
+    }
+    if(singleQueue.front()== mergeQueue.front()){
+      tmp=singleQueue.front();
+      singleQueue.pop();
+      return tmp;
+    }
+  //  if(singleQueue.front()> mergeQueue.front()){
+      tmp=mergeQueue.front();
+      mergeQueue.pop();
+      return tmp;
+//    }
+  }
+  if(mergeQueue.empty()==false && singleQueue.empty()==true){
+    tmp=mergeQueue.front();
+    mergeQueue.pop();
+    return tmp;
+  }
+  if(mergeQueue.empty()==true && singleQueue.empty()==false){
+    tmp=singleQueue.front();
+    singleQueue.pop();
+    return tmp;
+  }
+  if(mergeQueue.empty()==true && singleQueue.empty()==true)
+  return NULL;
     /**
      * @todo Your code here!
      *
@@ -83,14 +112,31 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
      * smaller of the two queues heads is the smallest item in either of
      * the queues. Return this item after removing it from its queue.
      */
-    return NULL;
+     return NULL;
 }
 
 void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
 {
     queue<TreeNode*> singleQueue; // Queue containing the leaf nodes
     queue<TreeNode*> mergeQueue;  // Queue containing the inner nodes
-
+    for(int i=0; i< (int)frequencies.size(); i++){
+      singleQueue.push(new TreeNode(frequencies[i]));
+    }
+    /*
+    while(frequencies!= NULL){
+      singleQueue.push(new TreeNode(frequencies.front()));
+      frequencies.erase(frequencies.begin());
+    }*/
+    while(mergeQueue.size() != 1){
+      TreeNode * smallest=removeSmallest(singleQueue, mergeQueue);
+      TreeNode * smaller = removeSmallest(singleQueue,mergeQueue);
+      TreeNode* sum=new TreeNode(smallest->freq.getFrequency()+smaller->freq.getFrequency());
+      sum->left=smallest;
+      sum->right=smaller;
+      mergeQueue.push(sum);
+    }
+    root_=mergeQueue.front();
+    mergeQueue.pop();
     /**
      * @todo Your code here!
      *
@@ -122,6 +168,7 @@ void HuffmanTree::decode(stringstream& ss, BinaryFileReader& bfile)
 {
     TreeNode* current = root_;
     while (bfile.hasBits()) {
+      
         /**
          * @todo Your code here!
          *
