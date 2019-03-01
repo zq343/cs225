@@ -68,10 +68,21 @@ namespace cs225 {
     if (width_ != other.width_) { return false; }
     if (height_ != other.height_) { return false; }
 
+    hslaColor hslaSpace1;
+    hslaColor hslaSpace2;
+    rgbaColor rgbaSpace1;
+    rgbaColor rgbaSpace2;
     for (unsigned i = 0; i < width_ * height_; i++) {
       HSLAPixel & p1 = imageData_[i];
       HSLAPixel & p2 = other.imageData_[i];
-      if (p1 != p2) { return false; }
+      hslaSpace1 = {p1.h, p1.s, p1.l, p1.a};
+      hslaSpace2 = {p2.h, p2.s, p2.l, p2.a};
+      rgbaSpace1 = hsl2rgb(hslaSpace1);
+      rgbaSpace2 = hsl2rgb(hslaSpace2);
+      if (rgbaSpace1.r != rgbaSpace2.r
+          || rgbaSpace1.g != rgbaSpace2.g
+          || rgbaSpace1.b != rgbaSpace2.b
+          || rgbaSpace1.a != rgbaSpace2.a) { return false; }
     }
 
     return true;
