@@ -22,8 +22,11 @@ using namespace cs225;
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this BFS
  */
-BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
+BFS::BFS(const PNG & png, const Point & start, double tolerance) {
   /** @todo [Part 1] */
+  png_=png;
+  start_=start;
+  tolerance_=tolerance;
 }
 
 /**
@@ -54,7 +57,9 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point output=list_.front();
+  list_.pop();
+  return output;
 }
 
 /**
@@ -62,7 +67,8 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point output=list_.front();
+  return output;
 }
 
 /**
@@ -70,5 +76,5 @@ Point BFS::peek() const {
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  return list_.empty();
 }
