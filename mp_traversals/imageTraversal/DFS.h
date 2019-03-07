@@ -34,6 +34,7 @@ public:
   bool empty() const;
 
 private:
+
   PNG png_;
   Point start_;
   double tolerance_;

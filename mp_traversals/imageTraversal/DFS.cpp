@@ -35,7 +35,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return Iterator(png_, start_, tolerance_, this);
 }
 
 /**
@@ -69,8 +69,8 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
-  Point output=list_.top();
-  return output;
+  return list_.top();
+
 }
 
 /**

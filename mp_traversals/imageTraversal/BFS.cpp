@@ -34,7 +34,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return Iterator(png_, start_, tolerance_, this);
 }
 
 /**
@@ -50,7 +50,13 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
+
+
+  list_.push(point);
 }
+
+
+
 
 /**
  * Removes and returns the current Point in the traversal.
