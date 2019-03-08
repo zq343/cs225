@@ -37,6 +37,7 @@ ImageTraversal::Iterator::Iterator() : traversal_(NULL)
 }
 
 
+
 ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double tolerance, ImageTraversal* traversal){
   png_=png;
   start_=start;
@@ -46,6 +47,15 @@ ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double 
   for (unsigned i = 0; i < png_.width() * png_.height(); i++) {
    visited_.push_back(false);
   }
+  if(inTolerance(current_)){
+    traversal_->add(current_);
+    visited_[current_.x + current_.y * png_.width()] = true;
+  }
+
+
+
+
+
 }
 /**
  * Iterator increment opreator.
@@ -54,29 +64,37 @@ ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double 
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
+  //Point right; Point up; Point left; Point down;
   Point right = Point(current_.x + 1, current_.y);
 //  if(visited_[(current_.x+2)*(current_.y+1)]==false && inTolerance(right)==true) traversal_->add(right);
   Point up = Point(current_.x, current_.y + 1);
-//  if(visited_[(current_.x+2)*(current_.y+1)]==false && inTolerance(right)==true) traversal_->add(right);
+ //if(visited_[(current_.x+2)*(current_.y+1)]==false && inTolerance(right)==true) traversal_->add(right);
   Point left= Point(current_.x-1, current_.y);
   Point down = Point(current_.x, current_.y - 1);
 
-  if (inTolerance(right)&&visited_[(current_.x+1)+(current_.y)*png_.width()]==false) traversal_->add(right);
-  if (inTolerance(up)&&visited_[(current_.x)+(current_.y+1)*png_.width()]==false) traversal_->add(up);
-  if (inTolerance(left)&&visited_[(current_.x-1)+(current_.y)*png_.width()]==false) traversal_->add(left);
-  if (inTolerance(down)&&visited_[(current_.x)+(current_.y-1)*png_.width()]==false) traversal_->add(down);
+  if (inTolerance(right)) traversal_->add(right);
+  if (inTolerance(up)) traversal_->add(up);
+  if (inTolerance(left)) traversal_->add(left);
+  if (inTolerance(down)) traversal_->add(down);
 
 
   if (traversal_->empty()) {
     return *this;
   }
-  if (!traversal_->empty()) {
-      current_ = traversal_->pop();
-      traversal_->add(current_);
-      current_ = traversal_->peek();
-      visited_[(current_.x)+(current_.y)*png_.width()]=true;
+  current_=traversal_->pop();
+//  if (!traversal_->empty()) {
+    while(visited_[current_.x+current_.y*png_.width()]==true){
+      current_=traversal_->pop();
+      if (traversal_->empty()) {
+        return *this;
+      }
+    }
+  //    current_ = traversal_->pop();
+    traversal_->add(current_);
+  //  current_ = traversal_->peek();
+    visited_[(current_.x)+(current_.y)*png_.width()]=true;
 
-  }
+
   return *this;
 }
 
@@ -111,7 +129,7 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
 }
 
 bool ImageTraversal::Iterator::inTolerance(Point point){
-  if (point.x >= png_.width() || point.y >= png_.height()) return false;
+  if (point.x >=png_.width() || point.y >= png_.height()) return false;
   HSLAPixel &orig = png_.getPixel(start_.x, start_.y);
   HSLAPixel &curr= png_.getPixel(point.x, point.y);
   if (calculateDelta(orig, curr) >= tolerance_) return false;

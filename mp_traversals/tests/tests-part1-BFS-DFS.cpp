@@ -12,6 +12,8 @@
 #include "../imageTraversal/DFS.h"
 
 using namespace cs225;
+#include <iostream>
+
 
 
 
@@ -35,10 +37,13 @@ TEST_CASE("DFS maintains a depth-first ordering", "[weight=0][part=1][part=1a]")
   dfs.add( Point(2, 2) );
   dfs.add( Point(2, 3) );
   dfs.add( Point(2, 4) );
-
+  std::cout << dfs.peek ()<< '\n';
   REQUIRE( dfs.pop() == Point(2, 4) );
+    std::cout << dfs.peek ()<< '\n';
   REQUIRE( dfs.pop() == Point(2, 3) );
+    std::cout << dfs.peek ()<< '\n';
   REQUIRE( dfs.pop() == Point(2, 2) );
+    std::cout << dfs.peek ()<< '\n';
   REQUIRE( dfs.pop() == Point(20, 20) );
 }
 

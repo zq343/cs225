@@ -27,6 +27,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
   png_=png;
   start_=start;
   tolerance_=tolerance;
+  list_.push(start_);
 }
 
 /**
@@ -63,9 +64,13 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  Point output=list_.front();
-  list_.pop();
-  return output;
+  if (!list_.empty()){
+    Point output=list_.front();
+    list_.pop();
+    return output;
+  }
+  return list_.front();
+
 }
 
 /**
@@ -73,8 +78,8 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  Point output=list_.front();
-  return output;
+//  Point output=list_.front();
+  return list_.front();
 }
 
 /**

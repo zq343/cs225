@@ -28,6 +28,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
   png_=png;
   start_=start;
   tolerance_=tolerance;
+  list_.push(start_);
 }
 
 /**
@@ -59,9 +60,12 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  Point output=list_.top();
-  list_.pop();
-  return output;
+  if (!list_.empty()){
+    Point output=list_.top();
+    list_.pop();
+    return output;
+  }
+  return list_.top();
 }
 
 /**
@@ -69,6 +73,7 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
+  //Point output=list_.top();
   return list_.top();
 
 }

@@ -44,7 +44,7 @@ public:
     bool inTolerance(Point point);
     ImageTraversal * traversal_;
 
-  protected:
+  //protected:
     PNG png_;
     Point start_;
     Point current_;
