@@ -3,6 +3,7 @@
  * Definitions of the binary tree functions you'll be writing for this lab.
  * You'll need to modify this file.
  */
+#include <cmath>
 
 template <class K, class V>
 V AVLTree<K, V>::find(const K& key) const
@@ -33,9 +34,9 @@ void AVLTree<K, V>::rotateLeft(Node*& t)
     Node *r=t->right;
     t->right=r->left;
     r->left=t;
-    t->height=t->height-1;
+    t->height=fmax(heightOrNeg1(t->left),heightOrNeg1(t->right))+1;
     t=r;
-    t->height=t->height+1;
+    t->height=fmax(heightOrNeg1(t->left),heightOrNeg1(t->right))+1;
 }
 
 
@@ -52,41 +53,41 @@ template <class K, class V>
 void AVLTree<K, V>::rotateRight(Node*& t)
 {
     functionCalls.push_back("rotateRight"); // Stores the rotation name (don't remove this)
-    Node *r=t->right;
+    Node *r=t->left;
     t->left=r->right;
     r->right=t;
-    t->height=t->height-1;
+    t->height=fmax(heightOrNeg1(t->left),heightOrNeg1(t->right))+1;
     t=r;
-    t->height=t->height+1;
+    t->height=fmax(heightOrNeg1(t->left),heightOrNeg1(t->right))+1;
 }
 
 template <class K, class V>
 void AVLTree<K, V>::rotateRightLeft(Node*& t)
 {
     functionCalls.push_back("rotateRightLeft"); // Stores the rotation name (don't remove this)
-    rotateLeft(t->right);
-    rotateRight(t);
+    rotateRight(t->right);
+    rotateLeft(t);
 }
 
 template <class K, class V>
 void AVLTree<K, V>::rebalance(Node*& subtree)
 {
     // your code here
-    if(heightOrNeg1(subtree->left) - heightOrNeg1(subtree->right)==2){
-      if(heightOrNeg1(subtree->left->left) - heightOrNeg1(subtree->left->right)==1){
+    if((heightOrNeg1(subtree->left)-heightOrNeg1(subtree->right))==2){
+      if((heightOrNeg1(subtree->left->left) - heightOrNeg1(subtree->left->right))==1){
         rotateRight(subtree);
       } else{
         rotateLeftRight(subtree);
       }
     }
-    else if(heightOrNeg1(subtree->left) - heightOrNeg1(subtree->right)==-2){
-      if(heightOrNeg1(subtree->right->right) - heightOrNeg1(subtree->right->left)==1){
+    if((heightOrNeg1(subtree->left) - heightOrNeg1(subtree->right))==-2){
+      if((heightOrNeg1(subtree->right->right) - heightOrNeg1(subtree->right->left))==1){
         rotateLeft(subtree);
       } else{
         rotateRightLeft(subtree);
       }
     }
-    subtree->height=subtree->height-1;
+    subtree->height=fmax(heightOrNeg1(subtree->left),heightOrNeg1(subtree->right))+1;
 }
 
 template <class K, class V>
@@ -141,8 +142,8 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
             while(iop->right!=NULL){
               iop=iop->right;
             }
-            swap(iop,subtree);
-            remove(subtree,key);
+            swap(subtree,iop);
+            remove(subtree->left,key);
         //    delete subtree;
         //    subtree=NULL;
         } else {
@@ -160,5 +161,5 @@ void AVLTree<K, V>::remove(Node*& subtree, const K& key)
         }
         // your code here
     }
-    rebalance(subtree);
+    if(subtree != NULL) rebalance(subtree);
 }
