@@ -30,6 +30,32 @@ void AVLTree<K, V>::rotateLeft(Node*& t)
 {
     functionCalls.push_back("rotateLeft"); // Stores the rotation name (don't remove this)
     // your code here
+
+
+    TreeNode *r=t->_;
+r->right_->parent_=root;
+  root->left_=r->right_;
+
+  r->right_=root;
+  root->parent_=r;
+  root=r;
+  r->parent_=NULL;
+
+}
+
+
+void leftRotate(TreeNode* root) {
+//  TreeNode * t=findLastUnbalanced(root);
+  TreeNode *r=root->right_;
+//  r->left_->parent_=t;
+r->left_->parent_=root;
+  root->right_=r->left_;
+
+  r->left_=root;
+  root->parent_=r;
+  root=r;
+    // your code here
+r->parent_=NULL;
 }
 
 template <class K, class V>
