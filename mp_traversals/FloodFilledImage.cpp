@@ -30,10 +30,9 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
-  ImageTraversal* traver =&traversal;
-  ColorPicker* colorP = &colorPicker;
-  traversal_.push_back(traver);
-  colorPicker_.push_back(colorP);
+
+  traversal_.push_back(&traversal);
+  colorPicker_.push_back(&colorPicker);
 }
 
 /**
@@ -58,19 +57,18 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+  int apply = 1;
   animation.addFrame(*png_);
-  for (unsigned int i = 0; i < traversal_.size(); i++) {
+  for (unsigned i = 0; i < traversal_.size(); i++) {
    ImageTraversal::Iterator it;
-   int apply = 0;
    for ( it = traversal_[i]->begin(); it != traversal_[i]->end(); ++it) {
-     if (apply% frameInterval==0) {
-       animation.addFrame(*png_);
-       apply=0;
-     }
-     HSLAPixel original = png_->getPixel((*it).x, (*it).y);
+     HSLAPixel & original = png_->getPixel((*it).x, (*it).y);
      HSLAPixel outputpixel = colorPicker_[i]->getColor((*it).x, (*it).y);
      original = outputpixel;
-     apply++;
+     if (apply% frameInterval==0) {
+       animation.addFrame(*png_);
+     }
+     ++apply;
    }
    animation.addFrame(*png_);
  }

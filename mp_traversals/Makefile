@@ -14,8 +14,7 @@ CPP_FILES += $(wildcard imageTraversal/*.cpp)
 OBJS += $(CPP_FILES:.cpp=.o)
 
 # Generated files
-CLEAN_RM = pacman-*.png i-rainbow-*.png lantern-rainbow-*.png pacman-*.gif i-rainbow-*.gif lantern-rainbow-*.gif frames
+CLEAN_RM = pacman-*.png i-rainbow-*.png lantern-rainbow-*.png pacman-*.gif i-rainbow-*.gif lantern-rainbow-*.gif myFloodFill-*.gif myFloodFill-*.png frames
 
 # Use the cs225 makefile template:
 include cs225/make/cs225.mk
-
