@@ -14,6 +14,7 @@
 #include <vector>
 #include "util/coloredout.h"
 #include "point.h"
+#include <stack>
 
 using std::vector;
 using std::string;
@@ -259,6 +260,22 @@ class KDTree
     /**
      * @todo Add your helper functions here.
      */
+    double getDistance(const Point<Dim>& point1, const Point<Dim>& point2) const;
+    KDTreeNode * copy(const KDTreeNode * subroot);
+    void clear(KDTreeNode * subroot);
+    void clear();
+    void swap(Point<Dim>& point1, Point<Dim>& point2);
+    int partition(vector<Point<Dim>>& newPoints, int left, int right, int pivotIndex,
+      int dim);
+    Point<Dim> select(vector<Point<Dim>>& newPoints, int left, int right, int k,
+      int dim);
+    KDTreeNode * construct(vector<Point<Dim>>& newPoints,int left, int right, int dim);
+    KDTreeNode * search(const Point<Dim>& query, KDTreeNode * subroot, int dim,
+      std::stack<KDTreeNode *> parents, std::stack<int> dimRecord,
+      std::stack<int> dirRecord) const;
+    void back(const Point<Dim>& query, std::stack<KDTreeNode *> parents,
+      std::stack<int> dimRecord, std::stack<int> dirRecord, KDTreeNode * currBestNode,
+      double currBestDist) const;
 };
 
 #include "kdtree.hpp"
