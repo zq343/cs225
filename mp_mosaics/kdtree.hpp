@@ -196,7 +196,8 @@ typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::search(const Point<Dim>& query,
 
 template <int Dim>
 void KDTree<Dim>::back(const Point<Dim>& query,
-  std::stack<KDTreeNode *> parents, std::stack<int> dimRecord, std::stack<int> dirRecord, KDTreeNode * currBestNode, double currBestDist) const{
+  std::stack<KDTreeNode *> parents, std::stack<int> dimRecord, std::stack<int> dirRecord,
+  KDTreeNode * currBestNode, double currBestDist) const{
   std::cout << "run back" <<std::endl;
   while (!parents.empty()) {
     std::cout << "back traversal" <<std::endl;
@@ -226,6 +227,7 @@ void KDTree<Dim>::back(const Point<Dim>& query,
 
 }
 
+
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
@@ -240,4 +242,10 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     double currBestDist = getDistance(currBestNode->point, query);
     back(query, parents, dimRecord, dirRecord, currBestNode, currBestDist);
     return currBestNode->point;
+}
+
+
+template <int Dim>
+Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
+{
 }
