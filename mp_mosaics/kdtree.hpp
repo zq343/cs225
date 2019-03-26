@@ -172,37 +172,54 @@ KDTree<Dim>::~KDTree() {
 
 template <int Dim>
 typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::search(const Point<Dim>& query,
-  KDTreeNode * subroot, int dim, std::stack<KDTreeNode *> parents,
-  std::stack<int> dimRecord, std::stack<int> dirRecord) const {
+  KDTreeNode * subroot, int dim, std::stack<KDTreeNode *> &parents,
+  std::stack<int> &dimRecord, std::stack<int> &dirRecord) const {
   if (subroot->point == query) {
     return subroot;
   }
   //Search the left subtree
-  if (smallerDimVal(query, subroot->point, dim) && subroot->left!=NULL) {
+  if (smallerDimVal(query, subroot->point, dim)) {
     parents.push(subroot);
+    std::cout<<subroot->point<<std::endl;
     dimRecord.push(dim);
     dirRecord.push(0);
-    return search(query, subroot->left, (dim+1)%Dim, parents, dimRecord, dirRecord);
+    if (subroot->left!=NULL) {
+      return search(query, subroot->left, (dim+1)%Dim, parents, dimRecord, dirRecord);
+    }
+    else return subroot;
   }
   //Search the right subtree
-  if (!smallerDimVal(query, subroot->point, dim) && subroot->right!=NULL){
+  if (!smallerDimVal(query, subroot->point, dim)){
     parents.push(subroot);
+    std::cout<<subroot->point<<std::endl;
     dimRecord.push(dim);
     dirRecord.push(1);
-    return search(query, subroot->right, (dim+1)%Dim, parents, dimRecord, dirRecord);
+    if (subroot->right!=NULL) {
+      return search(query, subroot->right, (dim+1)%Dim, parents, dimRecord, dirRecord);
+    }
+    else return subroot;
   }
   else return subroot;
 }
 
 template <int Dim>
-void KDTree<Dim>::back(const Point<Dim>& query,
-  std::stack<KDTreeNode *> parents, std::stack<int> dimRecord, std::stack<int> dirRecord,
-  KDTreeNode * currBestNode, double currBestDist) const{
-  std::cout << "run back" <<std::endl;
+bool KDTree<Dim>::splitPlaneCheck(const Point<Dim>& query, const Point<Dim>& searchNode, int dim, double currBestDist) const {
+  Point<Dim> tmp = searchNode;
+  tmp.set(dim, query[dim]);
+  double dis = getDistance(tmp, query);
+  if (dis<=currBestDist) return true;
+  else return false;
+
+}
+
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::back(const Point<Dim>& query, std::stack<KDTreeNode *> &parents, std::stack<int> &dimRecord,
+  std::stack<int> &dirRecord, KDTreeNode * currBestNode, double & currBestDist) const{
   while (!parents.empty()) {
     std::cout << "back traversal" <<std::endl;
     KDTreeNode * curr = parents.top();
     parents.pop();
+    std::cout<<curr->point<<std::endl;
     int dim = dimRecord.top();
     dimRecord.pop();
     int dir = dirRecord.top();
@@ -210,23 +227,45 @@ void KDTree<Dim>::back(const Point<Dim>& query,
     if (shouldReplace(query, currBestNode->point, curr->point)) {
       std::cout << "replace with parent node" <<std::endl;
       currBestNode = curr;
-      currBestDist = getDistance(currBestNode->point, query);
+      // currBestDist = getDistance(currBestNode->point, query);
     }
-    if ( abs(curr->point[dim]-query[dim])< currBestDist) {
-      std::cout << "go to other side" <<std::endl;
-      if (dir == 0 && curr->right!=NULL) {
-        currBestNode = search(query, curr->right, (dim+1)%Dim, parents, dimRecord, dirRecord);
-        currBestDist = getDistance(currBestNode->point, query);
-      }
-      else if (dir == 1 && curr->left!=NULL) {
-        currBestNode = search(query, curr->left, (dim+1)%Dim, parents, dimRecord, dirRecord);
-        currBestDist = getDistance(currBestNode->point, query);
-      }
-    }
+    // if ( splitPlaneCheck(query, curr->point, dim, currBestDist)) {
+    //   std::cout << "go to other side" <<std::endl;
+    //   if (dir == 0 && curr->right!=NULL) {
+    //     currBestNode = _findNearestNeighbor(query, curr->right, (dim+1)%Dim);
+    //     currBestDist = getDistance(currBestNode->point, query);
+    //   }
+    //   else if (dir == 1 && curr->left!=NULL) {
+    //     currBestNode = _findNearestNeighbor(query, curr->left, (dim+1)%Dim);
+    //     currBestDist = getDistance(currBestNode->point, query);
+    //   }
+    // }
   }
+  return currBestNode;
 
 }
 
+template <int Dim>
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::_findNearestNeighbor(const Point<Dim>& query, KDTreeNode* subroot, int dim) const
+{
+    /**
+     * @todo Implement this function!
+     */
+    std::stack<KDTreeNode *> *parents = new std::stack<KDTreeNode *>;
+    std::stack<int> *dimRecord = new std::stack<int>;;
+    std::stack<int> *dirRecord = new std::stack<int>;; //record the direction of the path, 0=left, 1=right;
+    KDTreeNode * currBestNode = new KDTreeNode();
+    currBestNode = search(query, root, dim, *parents, *dimRecord, *dirRecord);
+    if (currBestNode->point == query) return currBestNode;
+    std::cout << parents->empty() <<std::endl;
+    double * currBestDist = new double;
+    *currBestDist = getDistance(currBestNode->point, query);
+    currBestNode = back(query, *parents, *dimRecord, *dirRecord, currBestNode, *currBestDist);
+    delete parents;
+    delete dimRecord;
+    delete dirRecord;
+    return currBestNode;
+}
 
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
@@ -234,18 +273,5 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
     /**
      * @todo Implement this function!
      */
-    std::stack<KDTreeNode *> parents;
-    std::stack<int> dimRecord;
-    std::stack<int> dirRecord; //record the direction of the path, 0=left, 1=right;
-    KDTreeNode * currBestNode = search(query, root, 0, parents, dimRecord, dirRecord);
-    std::cout << parents.empty() <<std::endl;
-    double currBestDist = getDistance(currBestNode->point, query);
-    back(query, parents, dimRecord, dirRecord, currBestNode, currBestDist);
-    return currBestNode->point;
-}
-
-
-template <int Dim>
-Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
-{
+     return _findNearestNeighbor(query, root, 0)->point;
 }

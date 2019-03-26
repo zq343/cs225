@@ -270,13 +270,15 @@ class KDTree
     Point<Dim> select(vector<Point<Dim>>& newPoints, int left, int right, int k,
       int dim);
     KDTreeNode * construct(vector<Point<Dim>>& newPoints,int left, int right, int dim);
-    /*
     KDTreeNode * search(const Point<Dim>& query, KDTreeNode * subroot, int dim,
-      std::stack<KDTreeNode *> parents, std::stack<int> dimRecord,
-      std::stack<int> dirRecord) const;
-    void back(const Point<Dim>& query, std::stack<KDTreeNode *> parents,
-      std::stack<int> dimRecord, std::stack<int> dirRecord, KDTreeNode * currBestNode,
-      double currBestDist) const;*/
+      std::stack<KDTreeNode *> & parents, std::stack<int> &dimRecord,
+      std::stack<int> &dirRecord) const;
+    KDTreeNode * back(const Point<Dim>& query, std::stack<KDTreeNode *> &parents,
+      std::stack<int> &dimRecord, std::stack<int> &dirRecord, KDTreeNode * currBestNode,
+      double & currBestDist) const;
+    bool splitPlaneCheck(const Point<Dim>& query, const Point<Dim>& searchNode, int dim, double currBestDist) const;
+    KDTreeNode * _findNearestNeighbor(const Point<Dim>& query, KDTreeNode* subroot, int dim) const;
+
 };
 
 #include "kdtree.hpp"
