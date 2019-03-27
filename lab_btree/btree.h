@@ -1,3 +1,4 @@
+
 /**
  * @file btree.h
  * Definition of a B-tree class which can be used as a generic dictionary
@@ -342,8 +343,14 @@ template <class T, class C>
 size_t insertion_idx(const std::vector<T>& elements, const C& val)
 {
     /* TODO Your code goes here! */
-
-    return 5;
+    if(elements.size()==0|| val<elements[0]) return 0;
+    for (int i=0; i< (int) elements.size();i++){
+      if(val < elements[i] || elements[i] == val){
+        return i;
+      }
+    }
+    return elements.size();
+    // return 5;
 }
 
 #include "btree_given.cpp"
