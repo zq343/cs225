@@ -80,8 +80,13 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * Also, don't forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+     elems++;
+     if(shouldResize()) resizeTable();
+     std::pair<K, V> *tmp = new std::pair<K, V>(key, value);
+     size_t index= hashes::hash(key,size);
+     while (table[index] != NULL) index = (index + 1) % size;
+     table[index]=tmp;
+     should_probe[index] = true;
 }
 
 template <class K, class V>
@@ -90,18 +95,29 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+    size_t index = findIndex(key);
+    if ((int)index != -1) {
+        delete table[index];
+        table[index] = NULL;
+        elems--;
+    }
 }
 
 template <class K, class V>
 int LPHashTable<K, V>::findIndex(const K& key) const
 {
-    
+
     /**
      * @todo Implement this function
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    size_t index = hashes::hash(key, size);
+    while (should_probe[index]) {
+      if (table[index] != NULL && table[index]->first == key) return index;
+      index = (index + 1) % size;
+      if (index ==  hashes::hash(key, size)) break;
+    }
     return -1;
 }
 
@@ -151,7 +167,26 @@ void LPHashTable<K, V>::clear()
 template <class K, class V>
 void LPHashTable<K, V>::resizeTable()
 {
-
+  size_t resize = findPrime(2*size);
+  std::pair<K, V> ** resized_table = new std::pair<K,V> *[resize];
+  delete [] should_probe;
+  should_probe = new bool[resize];
+  for( size_t i = 0; i < resize; i++ ) {
+    resized_table[i] = NULL;
+    should_probe[i] = false;
+  }
+  for(size_t slot = 0; slot < size; slot++){
+    if (table[slot] != NULL) {
+      size_t index =  hashes::hash(table[slot]->first, resize);
+      size_t idx = index;
+      while(resized_table[idx]!=NULL) idx=(idx+1)%resize;
+      resized_table[idx]=table[slot];
+      should_probe[idx] = true;
+    }
+  }
+  delete [] table;
+  table = resized_table;
+	size = resize;
     /**
      * @todo Implement this function
      *
