@@ -103,8 +103,7 @@ void TileImage::generateResizedImage(int startX, int startY, int resolution) {
             }
         }
     }
-    
-}    
+}
 
 void TileImage::paste(PNG& canvas, int startX, int startY, int resolution) {
     // check if not resized
