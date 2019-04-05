@@ -63,7 +63,7 @@ class heap
      * The update is done in such a way that the array will be 
      * corrected, so it will remain as a valid heap.
      *
-     * @param idx The index at which to be inserted. 
+     * @param idx The index of the element to be updated 
      * (This is root()-indexed, so will work if
      * using either zero or one-indexed heaps)
      * @param elem The element to be updated with.
