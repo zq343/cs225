@@ -64,7 +64,8 @@ class heap
      * corrected, so it will remain as a valid heap.
      *
      * @param idx The index at which to be inserted. 
-     * (Remember this is zero-indexed by default)
+     * (This is root()-indexed, so will work if
+     * using either zero or one-indexed heaps)
      * @param elem The element to be updated with.
      */
     void updateElem(const size_t & idx, const T& elem);
