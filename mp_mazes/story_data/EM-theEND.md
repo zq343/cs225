@@ -1,0 +1,1 @@
+With all the trouble and consideration he been through, Elon Musk finally decided on becoming a entrepreneur a true business man who can influence the world. Telsa was created and do does some of the craziest technologies. The later story I think everyone already know.
