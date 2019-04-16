@@ -7,7 +7,10 @@ using namespace std;
 
 int main()
 {
-    // Write your own main here
-    cout << "Add your own tests here! Modify main.cpp" << endl;
-    return 0;
+  PNG* ret;
+  SquareMaze m;
+  m.makeMaze(5,5);
+  m.custom()->writeToFile("custom"+ string(".png"));
+  m.drawMaze()->writeToFile("d"+ string(".png"));
+  return 0;
 }

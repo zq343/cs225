@@ -1,5 +1,5 @@
 
-/**
+
 #include "../cs225/catch/catch.hpp"
 #include <iostream>
 #include <fstream>
@@ -182,7 +182,7 @@ TEST_CASE("testMakeMazeRandom", "[weight=10][part2]")
 {
 	SquareMaze maze1;
 	maze1.makeMaze(50, 50);
-	
+
 	SquareMaze maze2;
 	maze2.makeMaze(50, 50);
 	bool same = true;
@@ -291,6 +291,7 @@ TEST_CASE("testSolveMazeLarge", "[weight=10][part2][timeout=30000]") {
 }
 
 
+
 TEST_CASE("testDrawMazeSmall", "[weight=10][part2]")
 {
 	PNG solnImage = READ_UNSOLVED_PNG("testDrawMazeSmall", 2, 2);
@@ -351,5 +352,3 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2][timeout=30000]")
 	REQUIRE(*actualOutput == solnImage);
 	delete actualOutput;
 }
- */
-
