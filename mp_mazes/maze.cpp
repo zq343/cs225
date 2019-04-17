@@ -1,8 +1,13 @@
 #include "maze.h"
 #include <ctime>
+#include <queue>
+#include <map>
+#include <iostream>
+using cs225::HSLAPixel;
 /* Your code here! */
 SquareMaze::SquareMaze(){
 }
+
 void SquareMaze::makeMaze (int width, int height){
 //clean up
 	for(unsigned int i = 0 ;i < arr.size(); i++){
@@ -116,6 +121,18 @@ bool SquareMaze::canTravel (int x, int y, int dir) const{
 	if(right) return !(arr[desty][destx].first);
 	else	  return !(arr[desty][destx].second);
 }
+
+void SquareMaze::setWall(int x, int y, int dir, bool exists) {
+  if (x>=0&& y>=0 && y<dimy && x<dimx) {
+    if (dir == 0) {
+      arr[y][x].first = exists;
+    }
+    if (dir == 1) {
+      arr[y][x].second = exists;
+    }
+  }
+}
+/*
 void SquareMaze::setWall (int x, int y, int dir, bool exists){
 	int destx = x;
 	int desty = y;
@@ -134,6 +151,75 @@ void SquareMaze::setWall (int x, int y, int dir, bool exists){
 			arr[desty][destx].second = exists;
 	}
 }
+*/
+
+std::vector<int> SquareMaze::solveMaze() {
+
+  std::vector<int> lastRow;
+  std::map<int, int> pathTrack; //next, prev
+  std::vector<bool> visited;
+  for(int i = 0; i < dimx*dimy; i++) {
+    visited.push_back(false);
+  }
+  std::queue<int> queue;
+  queue.push(0);
+  visited[0] = true;
+
+  //Traversal
+  while(!queue.empty()) {
+    int front = queue.front();
+    queue.pop();
+
+    int x = front % dimx;
+    int y = front / dimx;
+
+    if (canTravel(x, y, 0) && !visited[front + 1]) {
+      pathTrack.insert(std::pair<int, int> (front + 1, front));
+      visited[front + 1] = true;
+      queue.push(front + 1);
+    }
+    if (canTravel(x, y, 1) && !visited[front+ dimx]) {
+      pathTrack.insert(std::pair<int, int> (front + dimx, front));
+      visited[front + dimx] = true;
+      queue.push(front + dimx);
+    }
+    if (canTravel(x, y, 2) && !visited[front - 1]) {
+      pathTrack.insert(std::pair<int, int> (front - 1, front));
+      visited[front - 1] = true;
+      queue.push(front - 1);
+    }
+    if (canTravel(x, y, 3) && !visited[front - dimx]) {
+      pathTrack.insert(std::pair<int, int> (front - dimx, front));
+      visited[front - dimx] = true;
+      queue.push(front - dimx);
+    }
+
+    if (y == dimy - 1) {
+      lastRow.push_back(front);
+    }
+
+  }
+
+
+  std::vector<int> ret;
+  int curr = lastRow.back();
+	exit_x= curr%dimx;
+  exit_y = dimy-1;
+
+  while (curr != 0) {
+    int prevIndex = pathTrack[curr];
+    if (curr == prevIndex + 1) ret.push_back(0);
+    if (curr == prevIndex + dimx) ret.push_back(1);
+    if (curr == prevIndex - 1) ret.push_back(2);
+    if (curr == prevIndex - dimx) ret.push_back(3);
+    curr = prevIndex;
+  }
+
+  reverse(ret.begin(),ret.end());
+  return ret;
+}
+
+/*
 std::vector< int > SquareMaze::solveMaze (){
 	vector<int> v = solveMaze_helper();
 	v.erase(v.begin());
@@ -176,6 +262,7 @@ std::vector< int > SquareMaze::solveMaze_helper (){
 	}
 	return solve(exit_x,exit_y);
 }
+*/
 /*
  *solve
  *	DESCRIPTION: dfs from exit to start point, and backtrack for the path

@@ -1,5 +1,4 @@
-#ifndef MAZE_H
-#define MAZE_H
+#pragma once
 #include <vector>
 #include <utility>
 #include "dsets.h"
@@ -30,5 +29,4 @@ private:
 	int exit_x;
 	int exit_y;
 
-};/* Your code here! */
-#endif
+};
