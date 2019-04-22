@@ -93,7 +93,7 @@ void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
   //even path size means the last vertex is p1, p2 wins. first -1 then +1
   int change=1;
   if(path.size()%2==0){
-    for(size_t i=0; i< path.size()-1;i++){
+    for(size_t i=0; i< path.size();i++){
       int change=1;
       Edge edge = path[i];
       int tmp = g_.getEdgeWeight(edge.source, edge.dest);
@@ -101,7 +101,7 @@ void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
       change=-change;
     }
   } else {
-    for(size_t i=0; i< path.size()-1;i++){
+    for(size_t i=0; i< path.size();i++){
       int change=1;
       Edge edge = path[i];
       int tmp = g_.getEdgeWeight(edge.source, edge.dest);
