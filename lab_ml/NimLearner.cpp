@@ -26,6 +26,28 @@
  */
 NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
     /* Your code goes here! */
+    for (int i = startingTokens; i>= 0; i--) {
+      string p1 = "p1-" + std::to_string(i);
+      string p2 = "p2-" + std::to_string(i);
+      g_.insertVertex(p1);
+      g_.insertVertex(p2);
+    }
+    for (int i = startingTokens; i>= 2; i--) {
+      g_.insertEdge("p1-" + std::to_string(i), "p2-" + std::to_string(i-1));
+      g_.setEdgeWeight("p1-" + std::to_string(i), "p2-" + std::to_string(i-1), 0);
+      g_.insertEdge("p1-" + std::to_string(i), "p2-" + std::to_string(i-2));
+      g_.setEdgeWeight("p1-" + std::to_string(i), "p2-" + std::to_string(i-2), 0);
+      g_.insertEdge("p2-" + std::to_string(i), "p1-" + std::to_string(i - 1));
+      g_.setEdgeWeight("p2-" + std::to_string(i), "p1-" + std::to_string(i - 1), 0);
+      g_.insertEdge("p2-" + std::to_string(i),"p1-" + std::to_string(i - 2));
+      g_.setEdgeWeight("p2-" + std::to_string(i), "p1-" + std::to_string(i - 2), 0);
+    }
+    g_.insertEdge("p1-1", "p2-0");
+    g_.setEdgeWeight("p1-1", "p2-0", 0);
+    g_.insertEdge("p2-1", "p1-0");
+    g_.setEdgeWeight("p2-1", "p1-0", 0);
+    startingVertex_ = "p1-" + std::to_string(startingTokens);
+
 }
 
 /**
@@ -39,7 +61,14 @@ NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
  */
 std::vector<Edge> NimLearner::playRandomGame() const {
   vector<Edge> path;
- /* Your code goes here! */
+  Vertex origin = startingVertex_;
+  while (g_.getAdjacent(origin).size() > 0) {
+    vector<Vertex> options = g_.getAdjacent(origin);
+    int random = rand() % options.size();
+    Vertex next = options[random];
+    path.push_back(g_.getEdge(origin, next));
+    origin= next;
+  }
   return path;
 }
 
@@ -61,6 +90,26 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
  /* Your code goes here! */
+  //even path size means the last vertex is p1, p2 wins. first -1 then +1
+  int change=1;
+  if(path.size()%2==0){
+    for(size_t i=0; i< path.size()-1;i++){
+      int change=1;
+      Edge edge = path[i];
+      int tmp = g_.getEdgeWeight(edge.source, edge.dest);
+      g_.setEdgeWeight(edge.source, edge.dest, tmp-change);
+      change=-change;
+    }
+  } else {
+    for(size_t i=0; i< path.size()-1;i++){
+      int change=1;
+      Edge edge = path[i];
+      int tmp = g_.getEdgeWeight(edge.source, edge.dest);
+      g_.setEdgeWeight(edge.source, edge.dest, tmp+change);
+      change=-change;
+    }
+  }
+
 }
 
 /**
