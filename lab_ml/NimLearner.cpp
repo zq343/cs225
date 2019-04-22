@@ -94,7 +94,7 @@ void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
   int change=1;
   if(path.size()%2==0){
     for(size_t i=0; i< path.size();i++){
-      int change=1;
+    //  int change=1;
       Edge edge = path[i];
       int tmp = g_.getEdgeWeight(edge.source, edge.dest);
       g_.setEdgeWeight(edge.source, edge.dest, tmp-change);
@@ -102,7 +102,7 @@ void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
     }
   } else {
     for(size_t i=0; i< path.size();i++){
-      int change=1;
+  //    int change=1;
       Edge edge = path[i];
       int tmp = g_.getEdgeWeight(edge.source, edge.dest);
       g_.setEdgeWeight(edge.source, edge.dest, tmp+change);
