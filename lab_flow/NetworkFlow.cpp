@@ -22,6 +22,28 @@ NetworkFlow::NetworkFlow(Graph & startingGraph, Vertex source, Vertex sink) :
   g_(startingGraph), residual_(Graph(true,true)), flow_(Graph(true,true)), source_(source), sink_(sink) {
 
   // YOUR CODE HERE
+  std::vector<Edge> currEdges = startingGraph.getEdges();
+  std::vector<Vertex> currVertices = startingGraph.getVertices();
+  //set vertices of flow and residual graph
+  for (auto v : currVertices) {
+    if (g_.vertexExists(v)) {
+      residual_.insertVertex(v);
+      flow_.insertVertex(v);
+    }
+  }
+  //
+  int weight = 0;
+  for (auto e : currEdges) {
+    residual_.insertEdge(e.source, e.dest);
+    residual_.insertEdge(e.dest, e.source);
+    //set return edge weight
+    residual_.setEdgeWeight(e.dest, e.source, weight);
+    //set edge weight
+    residual_.setEdgeWeight(e.source, e.dest, g_.getEdgeWeight(e.source, e.dest));
+    //flow edge
+    flow_.insertEdge(e.source, e.dest);
+    flow_.setEdgeWeight(e.source, e.dest, weight);
+  }
 }
 
   /**
@@ -34,7 +56,7 @@ NetworkFlow::NetworkFlow(Graph & startingGraph, Vertex source, Vertex sink) :
    * @param visited A set of vertices we have visited
    */
 
-bool NetworkFlow::findAugmentingPath(Vertex source, Vertex sink, 
+bool NetworkFlow::findAugmentingPath(Vertex source, Vertex sink,
   std::vector<Vertex> &path, std::set<Vertex> &visited) {
 
   if (visited.count(source) != 0)
@@ -84,7 +106,29 @@ bool NetworkFlow::findAugmentingPath(Vertex source, Vertex sink, std::vector<Ver
 
 int NetworkFlow::pathCapacity(const std::vector<Vertex> & path) const {
   // YOUR CODE HERE
-  return 0;
+  if (path.begin() == path.end()) return 0;
+
+//   std::vector<Vertex>::const_iterator itr = path.begin();
+//   std::vector<Vertex>::const_iterator itr_next = ++itr;
+//   Edge curr_edge = residual_.getEdge(*itr, *itr_next);
+//   int cap = curr_edge.getWeight();
+//   while(itr_next != path.end()) {
+//     int temp = residual_.getEdge(*itr, *itr_next).getWeight();
+//     if (cap > temp)
+//       cap = temp;
+//     itr++;
+//     itr_next++;
+//
+//   }
+//   return cap;
+// }
+  int cap = residual_.getEdgeWeight(path[0], path[1]);
+  for (size_t i = 1; i < path.size(); i++) {
+    int temp = residual_.getEdgeWeight(path[i-1], path[i]);
+    if (cap > temp)
+      cap = temp;
+  }
+  return cap;
 }
 
   /**
@@ -96,9 +140,42 @@ int NetworkFlow::pathCapacity(const std::vector<Vertex> & path) const {
    */
 
 const Graph & NetworkFlow::calculateFlow() {
-  // YOUR CODE HERE
+  int max=0;
+  std::vector<Vertex> path;
+
+  while(findAugmentingPath(source_,sink_,path)){
+    int capacity=pathCapacity(path);
+    max=max+capacity;
+    // std::vector<Vertex>::const_iterator itr = path.begin();
+    // std::vector<Vertex>::const_iterator itr_next = itr++;
+    size_t i = 1;
+    while(i != path.size()) {
+      if(flow_.edgeExists(path[i - 1], path[i])){
+        // std::cout << "exist" << std::endl;
+        flow_.setEdgeWeight(path[i - 1], path[i],flow_.getEdgeWeight(path[i - 1], path[i])+capacity);
+        // std::cout << "forward" << std::endl;
+        residual_.setEdgeWeight(path[i - 1], path[i],residual_.getEdgeWeight(path[i - 1], path[i])-capacity);
+        // std::cout << "reverse" << std::endl;
+        residual_.setEdgeWeight(path[i], path[i - 1], flow_.getEdgeWeight(path[i - 1], path[i]));
+
+      }else{
+        // std::cout << "notexist" << std::endl;
+        flow_.setEdgeWeight( path[i],path[i - 1], flow_.getEdgeWeight( path[i],path[i - 1])-capacity);
+        // std::cout << "reverse" << std::endl;
+        residual_.setEdgeWeight( path[i - 1],path[i], flow_.getEdgeWeight(path[i], path[i - 1]));
+        // std::cout << "forward" << std::endl;
+        residual_.setEdgeWeight(path[i],path[i - 1],g_.getEdgeWeight(path[i],path[i - 1])-flow_.getEdgeWeight(path[i],path[i - 1]));
+      }
+      // itr++;
+      // itr_next++;
+      i++;
+    }
+
+  }
+  maxFlow_=max;
   return flow_;
 }
+
 
 int NetworkFlow::getMaxFlow() const {
   return maxFlow_;
@@ -115,4 +192,3 @@ const Graph & NetworkFlow::getFlowGraph() const {
 const Graph & NetworkFlow::getResidualGraph() const {
   return residual_;
 }
-
