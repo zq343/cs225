@@ -52,8 +52,14 @@ V & Graph<V,E>::insertVertex(std::string key) {
 template <class V, class E>
 void Graph<V,E>::removeVertex(const std::string & key) {
   // TODO: Part 2
-  std::list<edgeListIter> edgeitr=adjList.at(key);
+  auto it=adjList.find(key);
+  std::list<edgeListIter> edgeitr=it->second;
   for(auto itr: edgeitr){
+    E edge= *itr;
+    V v1=edge.source();
+    V v2=edge.dest();
+    (adjList.find(v1.key())->second).remove(itr);
+    (adjList.find(v2.key())->second).remove(itr);
     edgeList.erase(itr);
   }
   vertexMap.erase(key);
